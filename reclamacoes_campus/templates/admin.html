@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Administração</title>
+</head>
+<body>
+
+<h1>Painel Administrativo</h1>
+
+{% for r in reclamacoes %}
+
+<h3>{{ r.titulo }}</h3>
+
+<p>{{ r.descricao }}</p>
+
+<p>Status atual:
+{{ r.status }}</p>
+
+<form action="/status/{{ r.id }}"
+method="POST">
+
+<select name="status">
+
+<option>Aberta</option>
+<option>Em análise</option>
+<option>Em andamento</option>
+<option>Resolvida</option>
+
+</select>
+
+<button>
+Atualizar
+</button>
+
+</form>
+
+<a href="/excluir/{{ r.id }}">
+Excluir
+</a>
+
+<hr>
+
+{% endfor %}
+
+</body>
+</html>

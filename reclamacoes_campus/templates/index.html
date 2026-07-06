@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Reclamações do Campus</title>
+</head>
+<body>
+
+<h1>Canal Anônimo do Campus</h1>
+
+<a href="/nova">Nova Reclamação</a>
+|
+<a href="/admin">Painel Administrativo</a>
+
+<hr>
+
+{% for r in reclamacoes %}
+
+<h3>{{ r.titulo }}</h3>
+
+<p><b>Categoria:</b>
+{{ r.categoria }}</p>
+
+<p><b>Local:</b>
+{{ r.local }}</p>
+
+<p>{{ r.descricao }}</p>
+
+<p><b>Status:</b>
+{{ r.status }}</p>
+
+<hr>
+
+{% endfor %}
+
+</body>
+</html>
