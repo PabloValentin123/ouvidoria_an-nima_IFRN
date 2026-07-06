@@ -1,36 +1,251 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
-<title>Reclamações do Campus</title>
+
+    <meta charset="UTF-8">
+    <title>Canal de Reclamações do Campus</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+
+            background:#edf2f7;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+
+        }
+
+        header{
+            background:#0d47a1;
+            color:white;
+            padding:25px;
+            text-align:center;
+            box-shadow:0 2px 10px rgba(0,0,0,.2);
+        }
+
+        header h1{
+            margin-bottom:10px;
+        }
+
+        nav{
+            margin-top:15px;
+        }
+
+        nav a{
+
+            color:white;
+            text-decoration:none;
+            background:#1565c0;
+            padding:10px 20px;
+            border-radius:5px;
+            margin:5px;
+            display:inline-block;
+            transition:.3s;
+
+        }
+
+        nav a:hover{
+
+            background:#42a5f5;
+
+        }
+
+        .container{
+
+            width:90%;
+            max-width:1100px;
+            margin:30px auto;
+            padding:30px;
+            flex:1;
+
+        }
+
+        .card{
+
+            background:white;
+            border-radius:10px;
+            margin-bottom:25px;
+            padding:25px;
+            box-shadow:0 4px 10px rgba(0,0,0,.1);
+
+            /* Impede que textos muito longos ultrapassem o card */
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+
+        }
+
+        .card h2{
+
+            color:#0d47a1;
+            margin-bottom:15px;
+
+            overflow-wrap: break-word;
+            word-break: break-word;
+
+        }
+
+        .info{
+
+            display:flex;
+            gap:15px;
+            margin-bottom:15px;
+            flex-wrap:wrap;
+
+        }
+
+        .categoria{
+
+            background:#1976d2;
+            color:white;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:14px;
+
+            overflow-wrap: break-word;
+            word-break: break-word;
+
+        }
+
+        .local{
+
+            background:#43a047;
+            color:white;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:14px;
+
+            overflow-wrap: break-word;
+            word-break: break-word;
+
+        }
+
+        .status{
+
+            background:#f9a825;
+            color:white;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:14px;
+
+        }
+
+        .descricao{
+
+            margin-top:10px;
+            line-height:1.7;
+
+            /* Quebra qualquer palavra muito grande */
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+
+            /* Mantém quebras de linha digitadas pelo usuário */
+            white-space:pre-wrap;
+
+        }
+
+        footer{
+
+            padding:20px;
+            text-align:center;
+            background:#0d47a1;
+            color:white;
+            margin-top:auto;
+
+        }
+
+    </style>
+
 </head>
+
 <body>
 
-<h1>Canal Anônimo do Campus</h1>
+<header>
 
-<a href="/nova">Nova Reclamação</a>
-|
-<a href="/admin">Painel Administrativo</a>
+    <h1>📢 Canal Anônimo de Reclamações</h1>
 
-<hr>
+    <p>Ajude a melhorar o campus enviando sua reclamação.</p>
+
+    <nav>
+
+        <a href="/nova">Nova Reclamação</a>
+
+        <a href="/admin">Painel Administrativo</a>
+
+    </nav>
+
+</header>
+
+<div class="container">
+
+{% if reclamacoes %}
 
 {% for r in reclamacoes %}
 
-<h3>{{ r.titulo }}</h3>
+<div class="card">
 
-<p><b>Categoria:</b>
-{{ r.categoria }}</p>
+    <h2>{{ r.titulo }}</h2>
 
-<p><b>Local:</b>
-{{ r.local }}</p>
+    <div class="info">
 
-<p>{{ r.descricao }}</p>
+        <span class="categoria">
+            Categoria: {{ r.categoria }}
+        </span>
 
-<p><b>Status:</b>
-{{ r.status }}</p>
+        <span class="local">
+            Local: {{ r.local }}
+        </span>
 
-<hr>
+        <span class="status">
+            {{ r.status }}
+        </span>
+
+    </div>
+
+    <p class="descricao">
+
+        {{ r.descricao }}
+
+    </p>
+
+</div>
 
 {% endfor %}
 
+{% else %}
+
+<div class="card">
+
+    <h2>Nenhuma reclamação encontrada.</h2>
+
+    <p class="descricao">
+
+        Seja o primeiro a enviar uma reclamação.
+
+    </p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<footer>
+
+    Sistema de Reclamações do Campus © 2026
+
+</footer>
+
 </body>
+
 </html>
