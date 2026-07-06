@@ -1,22 +1,204 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
-<title>Administração</title>
+
+<meta charset="UTF-8">
+<title>Painel Administrativo</title>
+
+<style>
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+
+}
+
+body{
+
+background:#edf2f7;
+
+}
+
+header{
+
+background:#0d47a1;
+padding:25px;
+text-align:center;
+color:white;
+
+
+}
+
+.container{
+
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    margin:40px auto;
+
+}
+
+table{
+
+    width:90%;
+    max-width:1200px;
+    border-collapse:collapse;
+    background:white;
+    box-shadow:0 4px 10px rgba(0,0,0,.1);
+    border-radius:10px;
+    overflow:hidden;
+
+}
+
+th{
+
+background:#1565c0;
+color:white;
+padding:15px;
+
+}
+
+td{
+
+padding:15px;
+border-bottom:1px solid #ddd;
+vertical-align:top;
+
+}
+
+tr:hover{
+
+background:#f3f7fb;
+
+}
+
+select{
+
+padding:8px;
+border-radius:5px;
+
+}
+
+button{
+
+padding:8px 15px;
+background:#1976d2;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+
+}
+
+button:hover{
+
+background:#0d47a1;
+
+}
+
+.excluir{
+
+background:#d32f2f;
+padding:8px 15px;
+border-radius:5px;
+color:white;
+text-decoration:none;
+
+}
+
+.excluir:hover{
+
+background:#b71c1c;
+
+}
+
+.voltar{
+
+display:inline-block;
+margin-top:20px;
+padding:10px 20px;
+background:#1976d2;
+color:white;
+text-decoration:none;
+border-radius:5px;
+
+}
+
+.voltar:hover{
+
+background:#0d47a1;
+
+}
+
+</style>
+
 </head>
+
 <body>
+
+<header>
 
 <h1>Painel Administrativo</h1>
 
+</header>
+
+<div class="container">
+
+<table>
+
+<tr>
+
+<th>Título</th>
+<th>Categoria</th>
+<th>Local</th>
+<th>Status</th>
+<th>Atualizar</th>
+<th>Excluir</th>
+
+</tr>
+
 {% for r in reclamacoes %}
 
-<h3>{{ r.titulo }}</h3>
+<tr>
 
-<p>{{ r.descricao }}</p>
+<td>
 
-<p>Status atual:
-{{ r.status }}</p>
+<strong>{{ r.titulo }}</strong>
 
-<form action="/status/{{ r.id }}"
+<br><br>
+
+{{ r.descricao }}
+
+</td>
+
+<td>
+
+{{ r.categoria }}
+
+</td>
+
+<td>
+
+{{ r.local }}
+
+</td>
+
+<td>
+
+{{ r.status }}
+
+</td>
+
+<td>
+
+<form
+action="/status/{{ r.id }}"
 method="POST">
 
 <select name="status">
@@ -28,19 +210,46 @@ method="POST">
 
 </select>
 
+<br><br>
+
 <button>
-Atualizar
+
+Salvar
+
 </button>
 
 </form>
 
-<a href="/excluir/{{ r.id }}">
+</td>
+
+<td>
+
+<a
+class="excluir"
+href="/excluir/{{ r.id }}">
+
 Excluir
+
 </a>
 
-<hr>
+</td>
+
+</tr>
 
 {% endfor %}
 
+</table>
+
+<a
+class="voltar"
+href="/">
+
+← Voltar ao site
+
+</a>
+
+</div>
+
 </body>
+
 </html>
