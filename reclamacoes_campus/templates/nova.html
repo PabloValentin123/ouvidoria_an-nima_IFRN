@@ -2,300 +2,172 @@
 <html lang="pt-br">
 
 <head>
-
-<meta charset="UTF-8">
-<title>Nova Reclamação</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-    background:#edf2f7;
-}
-
-header{
-    background:#0d47a1;
-    color:white;
-    text-align:center;
-    padding:25px;
-    box-shadow:0 2px 8px rgba(0,0,0,.2);
-}
-
-.container{
-    width:90%;
-    max-width:700px;
-    margin:40px auto;
-}
-
-.card{
-    background:white;
-    padding:35px;
-    border-radius:10px;
-    box-shadow:0 4px 12px rgba(0,0,0,.1);
-}
-
-h2{
-    color:#0d47a1;
-    margin-bottom:25px;
-    text-align:center;
-}
-
-label{
-    display:block;
-    margin-top:15px;
-    margin-bottom:8px;
-    font-weight:bold;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    font-size:15px;
-}
-
-textarea{
-    resize:vertical;
-    min-height:130px;
-}
-
-button{
-    margin-top:25px;
-    width:100%;
-    padding:14px;
-    border:none;
-    background:#1976d2;
-    color:white;
-    font-size:17px;
-    border-radius:6px;
-    cursor:pointer;
-    transition:.3s;
-}
-
-button:hover{
-    background:#0d47a1;
-}
-
-.voltar{
-    display:block;
-    margin-top:20px;
-    text-align:center;
-    text-decoration:none;
-    color:#1976d2;
-    font-weight:bold;
-}
-
-.voltar:hover{
-    color:#0d47a1;
-}
-
-.contador{
-    display:block;
-    margin-top:5px;
-    text-align:right;
-    color:#666;
-    font-size:13px;
-}
-
-.mensagem{
-    display:none;
-    margin-top:5px;
-    color:#d32f2f;
-    font-size:13px;
-    font-weight:bold;
-    background:#ffeaea;
-    border:1px solid #ffb5b5;
-    padding:8px;
-    border-radius:5px;
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <title>Nova Reclamação</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/nova.css') }}">
 </head>
 
 <body>
 
-<header>
+    <header>
+        <h1> Canal Anônimo de Reclamações</h1>
+    </header>
 
-<h1>📢 Canal Anônimo de Reclamações</h1>
+    <div class="container">
 
-</header>
+        <div class="card">
 
-<div class="container">
+            <h2>Nova Reclamação</h2>
 
-<div class="card">
+            <form action="/salvar" method="POST">
 
-<h2>Nova Reclamação</h2>
+                <label>Título</label>
 
-<form action="/salvar" method="POST">
+                <input
+                    type="text"
+                    id="titulo"
+                    name="titulo"
+                    maxlength="100"
+                    required>
 
-<label>Título</label>
+                <span class="contador" id="contadorTitulo">0 / 100</span>
 
-<input
-type="text"
-id="titulo"
-name="titulo"
-maxlength="100"
-required>
+                <div class="mensagem" id="msgTitulo">
+                    Limite máximo de caracteres atingido!
+                </div>
 
-<span class="contador" id="contadorTitulo">0 / 100</span>
+                <label>Descrição</label>
 
-<div class="mensagem" id="msgTitulo">
-Limite máximo de caracteres atingido!
-</div>
+                <textarea
+                    id="descricao"
+                    name="descricao"
+                    maxlength="500"
+                    required></textarea>
 
-<label>Descrição</label>
+                <span class="contador" id="contadorDescricao">0 / 500</span>
 
-<textarea
-id="descricao"
-name="descricao"
-maxlength="500"
-required></textarea>
+                <div class="mensagem" id="msgDescricao">
+                    Limite máximo de caracteres atingido!
+                </div>
 
-<span class="contador" id="contadorDescricao">0 / 500</span>
+                <label>Categoria</label>
 
-<div class="mensagem" id="msgDescricao">
-Limite máximo de caracteres atingido!
-</div>
+                <select name="categoria">
+                    <option>Infraestrutura</option>
+                    <option>Limpeza</option>
+                    <option>Segurança</option>
+                    <option>Internet</option>
+                    <option>Banheiros</option>
+                    <option>Refeitório</option>
+                    <option>Equipamentos</option>
+                    <option>Outros</option>
+                </select>
 
-<label>Categoria</label>
+                <label>Local</label>
 
-<select name="categoria">
+                <input
+                    type="text"
+                    id="local"
+                    name="local"
+                    maxlength="100"
+                    required>
 
-<option>Infraestrutura</option>
-<option>Limpeza</option>
-<option>Segurança</option>
-<option>Internet</option>
-<option>Banheiros</option>
-<option>Refeitório</option>
-<option>Equipamentos</option>
-<option>Outros</option>
+                <span class="contador" id="contadorLocal">0 / 100</span>
 
-</select>
+                <div class="mensagem" id="msgLocal">
+                    Limite máximo de caracteres atingido!
+                </div>
 
-<label>Local</label>
+                <button type="submit">
+                    Enviar Reclamação
+                </button>
 
-<input
-type="text"
-id="local"
-name="local"
-maxlength="100"
-required>
+            </form>
 
-<span class="contador" id="contadorLocal">0 / 100</span>
+            <a class="voltar" href="/">
+                ← Voltar
+            </a>
 
-<div class="mensagem" id="msgLocal">
-Limite máximo de caracteres atingido!
-</div>
+        </div>
 
-<button type="submit">
+    </div>
 
-Enviar Reclamação
+    <script>
 
-</button>
+        function controlarCampo(idCampo, idContador, idMensagem, limite) {
 
-</form>
+            const campo = document.getElementById(idCampo);
+            const contador = document.getElementById(idContador);
+            const mensagem = document.getElementById(idMensagem);
 
-<a class="voltar" href="/">
+            function atualizar() {
 
-← Voltar
+                contador.innerHTML = campo.value.length + " / " + limite;
 
-</a>
+                if (campo.value.length >= limite) {
+                    mensagem.style.display = "block";
+                } else {
+                    mensagem.style.display = "none";
+                }
 
-</div>
+            }
 
-</div>
+            campo.addEventListener("input", atualizar);
 
-<script>
+            campo.addEventListener("keydown", function (e) {
 
-function controlarCampo(idCampo, idContador, idMensagem, limite){
+                const teclasPermitidas = [
+                    "Backspace",
+                    "Delete",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "ArrowUp",
+                    "ArrowDown",
+                    "Tab",
+                    "Home",
+                    "End"
+                ];
 
-    const campo = document.getElementById(idCampo);
-    const contador = document.getElementById(idContador);
-    const mensagem = document.getElementById(idMensagem);
+                if (
+                    campo.value.length >= limite &&
+                    !teclasPermitidas.includes(e.key) &&
+                    !e.ctrlKey &&
+                    !e.metaKey
+                ) {
 
-    function atualizar(){
+                    e.preventDefault();
+                    mensagem.style.display = "block";
 
-        contador.innerHTML = campo.value.length + " / " + limite;
+                }
 
-        if(campo.value.length >= limite){
+            });
 
-            mensagem.style.display = "block";
-
-        }else{
-
-            mensagem.style.display = "none";
-
-        }
-
-    }
-
-    campo.addEventListener("input", atualizar);
-
-    campo.addEventListener("keydown", function(e){
-
-        const teclasPermitidas = [
-            "Backspace",
-            "Delete",
-            "ArrowLeft",
-            "ArrowRight",
-            "ArrowUp",
-            "ArrowDown",
-            "Tab",
-            "Home",
-            "End"
-        ];
-
-        if(
-            campo.value.length >= limite &&
-            !teclasPermitidas.includes(e.key) &&
-            !e.ctrlKey &&
-            !e.metaKey
-        ){
-
-            e.preventDefault();
-
-            mensagem.style.display = "block";
+            atualizar();
 
         }
 
-    });
+        controlarCampo(
+            "titulo",
+            "contadorTitulo",
+            "msgTitulo",
+            100
+        );
 
-    atualizar();
+        controlarCampo(
+            "descricao",
+            "contadorDescricao",
+            "msgDescricao",
+            500
+        );
 
-}
+        controlarCampo(
+            "local",
+            "contadorLocal",
+            "msgLocal",
+            100
+        );
 
-controlarCampo(
-    "titulo",
-    "contadorTitulo",
-    "msgTitulo",
-    100
-);
-
-controlarCampo(
-    "descricao",
-    "contadorDescricao",
-    "msgDescricao",
-    500
-);
-
-controlarCampo(
-    "local",
-    "contadorLocal",
-    "msgLocal",
-    100
-);
-
-</script>
+    </script>
 
 </body>
 
