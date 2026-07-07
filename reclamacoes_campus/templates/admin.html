@@ -1,252 +1,294 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
+    <meta charset="UTF-8">
+    <title>Painel Administrativo</title>
 
-<meta charset="UTF-8">
-<title>Painel Administrativo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-<style>
+        body {
+            background: #edf2f7;
+            color: #333;
+        }
 
-*{
+        header {
+            background: #0d47a1;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        }
 
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 35px auto;
+        }
 
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,.08);
+        }
 
-body{
+        thead {
+            background: #1565c0;
+            color: white;
+        }
 
-background:#edf2f7;
+        th {
+            padding: 18px;
+            text-align: left;
+            font-size: 15px;
+        }
 
-}
+        td {
+            padding: 20px 14px;
+            vertical-align: top;
+            border-bottom: 1px solid #ececec;
 
-header{
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
 
-background:#0d47a1;
-padding:25px;
-text-align:center;
-color:white;
+        tr {
+            transition: .2s;
+        }
 
+        tbody tr:hover {
+            background: #f8fbff;
+        }
 
-}
+        /* Larguras */
 
-.container{
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 42%;
+        }
 
-    width:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    margin:40px auto;
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 14%;
+        }
 
-}
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 16%;
+        }
 
-table{
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 10%;
+            text-align: center;
+        }
 
-    width:90%;
-    max-width:1200px;
-    border-collapse:collapse;
-    background:white;
-    box-shadow:0 4px 10px rgba(0,0,0,.1);
-    border-radius:10px;
-    overflow:hidden;
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 12%;
+        }
 
-}
+        th:nth-child(6),
+        td:nth-child(6) {
+            width: 6%;
+            text-align: center;
+        }
 
-th{
+        .titulo {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: block;
+            color: #1a1a1a;
+        }
 
-background:#1565c0;
-color:white;
-padding:15px;
+        .descricao {
+            color: #555;
+            line-height: 1.5;
+        }
 
-}
+        .status-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-td{
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: white;
+        }
 
-padding:15px;
-border-bottom:1px solid #ddd;
-vertical-align:top;
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #1976d2;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: .2s;
+        }
 
-}
+        button:hover {
+            background: #0d47a1;
+        }
 
-tr:hover{
+        .excluir {
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-background:#f3f7fb;
+            width: 100%;
+            min-width: 90px;
+            height: 42px;
 
-}
+            background: #d32f2f;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
 
-select{
+            transition: .2s;
+        }
 
-padding:8px;
-border-radius:5px;
+        .excluir:hover {
+            background: #b71c1c;
+        }
 
-}
+        .voltar {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 22px;
+            background: #1976d2;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: .2s;
+        }
 
-button{
+        .voltar:hover {
+            background: #0d47a1;
+        }
 
-padding:8px 15px;
-background:#1976d2;
-color:white;
-border:none;
-border-radius:5px;
-cursor:pointer;
+        .status {
+            font-weight: bold;
+        }
 
-}
-
-button:hover{
-
-background:#0d47a1;
-
-}
-
-.excluir{
-
-background:#d32f2f;
-padding:8px 15px;
-border-radius:5px;
-color:white;
-text-decoration:none;
-
-}
-
-.excluir:hover{
-
-background:#b71c1c;
-
-}
-
-.voltar{
-
-display:inline-block;
-margin-top:20px;
-padding:10px 20px;
-background:#1976d2;
-color:white;
-text-decoration:none;
-border-radius:5px;
-
-}
-
-.voltar:hover{
-
-background:#0d47a1;
-
-}
-
-</style>
+    </style>
 
 </head>
 
 <body>
 
 <header>
-
-<h1>Painel Administrativo</h1>
-
+    <h1>Painel Administrativo</h1>
 </header>
 
 <div class="container">
 
-<table>
+    <table>
 
-<tr>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Categoria</th>
+                <th>Local</th>
+                <th>Status</th>
+                <th>Atualizar</th>
+                <th>Excluir</th>
+            </tr>
+        </thead>
 
-<th>Título</th>
-<th>Categoria</th>
-<th>Local</th>
-<th>Status</th>
-<th>Atualizar</th>
-<th>Excluir</th>
+        <tbody>
 
-</tr>
+        {% for r in reclamacoes %}
 
-{% for r in reclamacoes %}
+            <tr>
 
-<tr>
+                <td>
 
-<td>
+                    <span class="titulo">
+                        {{ r.titulo }}
+                    </span>
 
-<strong>{{ r.titulo }}</strong>
+                    <div class="descricao">
+                        {{ r.descricao }}
+                    </div>
 
-<br><br>
+                </td>
 
-{{ r.descricao }}
+                <td>
+                    {{ r.categoria }}
+                </td>
 
-</td>
+                <td>
+                    {{ r.local }}
+                </td>
 
-<td>
+                <td class="status">
+                    {{ r.status }}
+                </td>
 
-{{ r.categoria }}
+                <td>
 
-</td>
+                    <form class="status-form"
+                          action="/status/{{ r.id }}"
+                          method="POST">
 
-<td>
+                        <select name="status">
 
-{{ r.local }}
+                            <option {% if r.status=="Aberta" %}selected{% endif %}>Aberta</option>
 
-</td>
+                            <option {% if r.status=="Em análise" %}selected{% endif %}>Em análise</option>
 
-<td>
+                            <option {% if r.status=="Em andamento" %}selected{% endif %}>Em andamento</option>
 
-{{ r.status }}
+                            <option {% if r.status=="Resolvida" %}selected{% endif %}>Resolvida</option>
 
-</td>
+                        </select>
 
-<td>
+                        <button type="submit">
+                            Salvar
+                        </button>
 
-<form
-action="/status/{{ r.id }}"
-method="POST">
+                    </form>
 
-<select name="status">
+                </td>
 
-<option>Aberta</option>
-<option>Em análise</option>
-<option>Em andamento</option>
-<option>Resolvida</option>
+                <td>
 
-</select>
+                    <a class="excluir"
+                       href="/excluir/{{ r.id }}">
+                        Excluir
+                    </a>
 
-<br><br>
+                </td>
 
-<button>
+            </tr>
 
-Salvar
+        {% endfor %}
 
-</button>
+        </tbody>
 
-</form>
+    </table>
 
-</td>
-
-<td>
-
-<a
-class="excluir"
-href="/excluir/{{ r.id }}">
-
-Excluir
-
-</a>
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</table>
-
-<a
-class="voltar"
-href="/">
-
-← Voltar ao site
-
-</a>
+    <a class="voltar" href="/">
+        ← Voltar ao site
+    </a>
 
 </div>
 
