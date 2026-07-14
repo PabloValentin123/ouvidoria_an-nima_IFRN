@@ -1,92 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-
-    <meta charset="UTF-8">
-    <title>Canal de Reclamações do Campus</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='/index.css') }}">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ouvidoria IFRN — Canal de Reclamações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
-
 <body>
 
-<header>
+{% set status_class = {
+    'Aberta': 'aberta',
+    'Em análise': 'analise',
+    'Em andamento': 'andamento',
+    'Resolvida': 'resolvida'
+} %}
 
-    <h1>Canal Anônimo de Reclamações</h1>
-
-    <p>Ajude a melhorar o campus enviando sua reclamação.</p>
-
-    <nav>
-
-        <a href="/nova">Nova Reclamação</a>
-
-        <a href="/admin">Painel Administrativo</a>
-
-    </nav>
-
+<header class="site-header">
+    <div class="header-inner">
+        <div class="brand">
+            <span class="brand-mark">IFRN</span>
+            <div class="brand-text">
+                <h1>Canal de Reclamações</h1>
+                <p class="brand-sub">Ouvidoria estudantil anônima do campus</p>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <a href="/nova" class="nav-link nav-link--primary">Nova Reclamação</a>
+            <a href="/admin" class="nav-link">Painel Administrativo</a>
+        </nav>
+    </div>
 </header>
 
-<div class="container">
+<main class="container">
 
-{% if reclamacoes %}
-
-{% for r in reclamacoes %}
-
-<div class="card">
-
-    <h2>{{ r.titulo }}</h2>
-
-    <div class="info">
-
-        <span class="categoria">
-            Categoria: {{ r.categoria }}
-        </span>
-
-        <span class="local">
-            Local: {{ r.local }}
-        </span>
-
-        <span class="status">
-            {{ r.status }}
-        </span>
-
+    <div class="list-head">
+        <h2>Reclamações registradas</h2>
+        <p class="list-sub">Acompanhe, de forma pública e anônima, o status de cada reclamação enviada pela comunidade acadêmica.</p>
     </div>
 
-    <p class="descricao">
+    <div class="feed">
+    {% for r in reclamacoes %}
+        <article class="card">
+            <div class="card-top">
+                <span class="protocol">Protocolo Nº {{ '%04d'|format(r.id) }}</span>
+                <span class="status status--{{ status_class.get(r.status, 'default') }}">{{ r.status }}</span>
+            </div>
 
-        {{ r.descricao }}
+            <h3 class="titulo">{{ r.titulo }}</h3>
 
-    </p>
+            <div class="info">
+                <span class="tag tag--categoria">{{ r.categoria }}</span>
+                <span class="tag tag--local">{{ r.local }}</span>
+            </div>
 
-</div>
+            <p class="descricao">{{ r.descricao }}</p>
+        </article>
+    {% else %}
+        <p class="empty">Nenhuma reclamação registrada até o momento.</p>
+    {% endfor %}
+    </div>
 
-{% endfor %}
-
-{% else %}
-
-<div class="card">
-
-    <h2>Nenhuma reclamação encontrada.</h2>
-
-    <p class="descricao">
-
-        Seja o primeiro a enviar uma reclamação.
-
-    </p>
-
-</div>
-
-{% endif %}
-
-</div>
+</main>
 
 <footer>
-
-    Sistema de Reclamações do Campus © 2026
-
+    <p>Instituto Federal do Rio Grande do Norte — Canal Anônimo de Reclamações</p>
 </footer>
 
 </body>
-
 </html>
