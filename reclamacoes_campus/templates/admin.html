@@ -5,13 +5,18 @@
     <meta charset="UTF-8">
     <title>Painel Administrativo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='/admin.css') }}">
-
 </head>
 
 <body>
 
 <header>
+
+    <a class="voltar-header" href="/">
+        ← Início
+    </a>
+
     <h1>Painel Administrativo</h1>
+
 </header>
 
 <div class="container">
@@ -97,17 +102,8 @@
             </tr>
 
         {% endfor %}
-
         </tbody>
-
     </table>
-
-    <a class="voltar" href="/">
-        ← Voltar ao site
-    </a>
-
 </div>
-
 </body>
-
 </html>
