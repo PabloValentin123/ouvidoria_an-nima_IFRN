@@ -1,174 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Nova Reclamação</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='/nova.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Reclamação — Ouvidoria IFRN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='nova.css') }}">
 </head>
-
 <body>
 
-    <header>
-        <h1> Canal Anônimo de Reclamações</h1>
-    </header>
+<header>
+    <h1>Nova Reclamação Anônima</h1>
+    <p class="brand-sub">Seu relato é sigiloso e ajuda a melhorar o campus</p>
+</header>
 
-    <div class="container">
+<div class="container">
+    <div class="card">
+        <h2>Descreva a ocorrência</h2>
 
-        <div class="card">
+        <form action="/salvar" method="POST">
 
-            <h2>Nova Reclamação</h2>
+            <label for="titulo">Título</label>
+            <input type="text"
+                   id="titulo"
+                   name="titulo"
+                   placeholder="Resuma o problema em poucas palavras"
+                   maxlength="100"
+                   required>
 
-            <form action="/salvar" method="POST">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao"
+                      name="descricao"
+                      placeholder="Descreva o problema com o máximo de detalhes possível"
+                      maxlength="600"
+                      oninput="document.getElementById('contador').textContent = this.value.length + '/600'"
+                      required></textarea>
+            <span class="contador" id="contador">0/600</span>
 
-                <label>Título</label>
+            <label for="categoria">Categoria</label>
+            <select id="categoria" name="categoria">
+                <option>Infraestrutura</option>
+                <option>Limpeza</option>
+                <option>Segurança</option>
+                <option>Wi-Fi</option>
+                <option>Outros</option>
+            </select>
 
-                <input
-                    type="text"
-                    id="titulo"
-                    name="titulo"
-                    maxlength="100"
-                    required>
+            <label for="local">Local do problema</label>
+            <input type="text"
+                   id="local"
+                   name="local"
+                   placeholder="Ex: Bloco B, Laboratório 3"
+                   required>
 
-                <span class="contador" id="contadorTitulo">0 / 100</span>
+            <button type="submit">Enviar Reclamação</button>
 
-                <div class="mensagem" id="msgTitulo">
-                    Limite máximo de caracteres atingido!
-                </div>
+        </form>
 
-                <label>Descrição</label>
-
-                <textarea
-                    id="descricao"
-                    name="descricao"
-                    maxlength="500"
-                    required></textarea>
-
-                <span class="contador" id="contadorDescricao">0 / 500</span>
-
-                <div class="mensagem" id="msgDescricao">
-                    Limite máximo de caracteres atingido!
-                </div>
-
-                <label>Categoria</label>
-
-                <select name="categoria">
-                    <option>Infraestrutura</option>
-                    <option>Limpeza</option>
-                    <option>Segurança</option>
-                    <option>Internet</option>
-                    <option>Banheiros</option>
-                    <option>Refeitório</option>
-                    <option>Equipamentos</option>
-                    <option>Outros</option>
-                </select>
-
-                <label>Local</label>
-
-                <input
-                    type="text"
-                    id="local"
-                    name="local"
-                    maxlength="100"
-                    required>
-
-                <span class="contador" id="contadorLocal">0 / 100</span>
-
-                <div class="mensagem" id="msgLocal">
-                    Limite máximo de caracteres atingido!
-                </div>
-
-                <button type="submit">
-                    Enviar Reclamação
-                </button>
-
-            </form>
-
-            <a class="voltar" href="/">
-                ← Voltar
-            </a>
-
-        </div>
-
+        <a class="voltar" href="/">← Voltar ao canal</a>
     </div>
+</div>
 
-    <script>
-
-        function controlarCampo(idCampo, idContador, idMensagem, limite) {
-
-            const campo = document.getElementById(idCampo);
-            const contador = document.getElementById(idContador);
-            const mensagem = document.getElementById(idMensagem);
-
-            function atualizar() {
-
-                contador.innerHTML = campo.value.length + " / " + limite;
-
-                if (campo.value.length >= limite) {
-                    mensagem.style.display = "block";
-                } else {
-                    mensagem.style.display = "none";
-                }
-
-            }
-
-            campo.addEventListener("input", atualizar);
-
-            campo.addEventListener("keydown", function (e) {
-
-                const teclasPermitidas = [
-                    "Backspace",
-                    "Delete",
-                    "ArrowLeft",
-                    "ArrowRight",
-                    "ArrowUp",
-                    "ArrowDown",
-                    "Tab",
-                    "Home",
-                    "End"
-                ];
-
-                if (
-                    campo.value.length >= limite &&
-                    !teclasPermitidas.includes(e.key) &&
-                    !e.ctrlKey &&
-                    !e.metaKey
-                ) {
-
-                    e.preventDefault();
-                    mensagem.style.display = "block";
-
-                }
-
-            });
-
-            atualizar();
-
-        }
-
-        controlarCampo(
-            "titulo",
-            "contadorTitulo",
-            "msgTitulo",
-            100
-        );
-
-        controlarCampo(
-            "descricao",
-            "contadorDescricao",
-            "msgDescricao",
-            500
-        );
-
-        controlarCampo(
-            "local",
-            "contadorLocal",
-            "msgLocal",
-            100
-        );
-
-    </script>
+<footer>
+    <p>Instituto Federal do Rio Grande do Norte — Canal Anônimo de Reclamações</p>
+</footer>
 
 </body>
-
 </html>
