@@ -1,109 +1,90 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Painel Administrativo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='/admin.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Administrativo — Ouvidoria IFRN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
 </head>
-
 <body>
 
-<header>
+{% set status_class = {
+    'Aberta': 'aberta',
+    'Em análise': 'analise',
+    'Em andamento': 'andamento',
+    'Resolvida': 'resolvida'
+} %}
 
-    <a class="voltar-header" href="/">
-        ← Início
-    </a>
-
-    <h1>Painel Administrativo</h1>
-
+<header class="site-header">
+    <div class="header-inner">
+        <div class="brand">
+            <span class="brand-mark">IFRN</span>
+            <div class="brand-text">
+                <h1>Painel Administrativo</h1>
+                <p class="brand-sub">Gestão das reclamações da comunidade acadêmica</p>
+            </div>
+        </div>
+        <a href="/" class="voltar">← Voltar ao canal</a>
+    </div>
 </header>
 
-<div class="container">
+<main class="container">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Reclamação</th>
+                    <th>Categoria</th>
+                    <th>Local</th>
+                    <th>Status</th>
+                    <th>Atualizar status</th>
+                    <th>Excluir</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for r in reclamacoes %}
+                <tr>
+                    <td>
+                        <span class="protocol">Protocolo Nº {{ '%04d'|format(r.id) }}</span>
+                        <span class="titulo">{{ r.titulo }}</span>
+                        <p class="descricao">{{ r.descricao }}</p>
+                    </td>
+                    <td><span class="tag tag--categoria">{{ r.categoria }}</span></td>
+                    <td><span class="tag tag--local">{{ r.local }}</span></td>
+                    <td><span class="status status--{{ status_class.get(r.status, 'default') }}">{{ r.status }}</span></td>
+                    <td>
+                        <form class="status-form" action="/status/{{ r.id }}" method="POST">
+                            <select name="status">
+                                <option {% if r.status == 'Aberta' %}selected{% endif %}>Aberta</option>
+                                <option {% if r.status == 'Em análise' %}selected{% endif %}>Em análise</option>
+                                <option {% if r.status == 'Em andamento' %}selected{% endif %}>Em andamento</option>
+                                <option {% if r.status == 'Resolvida' %}selected{% endif %}>Resolvida</option>
+                            </select>
+                            <button type="submit">Atualizar</button>
+                        </form>
+                    </td>
+                    <td>
+                        <a class="excluir"
+                           href="/excluir/{{ r.id }}"
+                           onclick="return confirm('Tem certeza que deseja excluir esta reclamação?');">
+                            Excluir
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" class="empty">Nenhuma reclamação registrada.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
 
-    <table>
+<footer>
+    <p>Instituto Federal do Rio Grande do Norte — Ouvidoria Anônima</p>
+</footer>
 
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Categoria</th>
-                <th>Local</th>
-                <th>Status</th>
-                <th>Atualizar</th>
-                <th>Excluir</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-        {% for r in reclamacoes %}
-
-            <tr>
-
-                <td>
-
-                    <span class="titulo">
-                        {{ r.titulo }}
-                    </span>
-
-                    <div class="descricao">
-                        {{ r.descricao }}
-                    </div>
-
-                </td>
-
-                <td>
-                    {{ r.categoria }}
-                </td>
-
-                <td>
-                    {{ r.local }}
-                </td>
-
-                <td class="status">
-                    {{ r.status }}
-                </td>
-
-                <td>
-
-                    <form class="status-form"
-                          action="/status/{{ r.id }}"
-                          method="POST">
-
-                        <select name="status">
-
-                            <option {% if r.status=="Aberta" %}selected{% endif %}>Aberta</option>
-
-                            <option {% if r.status=="Em análise" %}selected{% endif %}>Em análise</option>
-
-                            <option {% if r.status=="Em andamento" %}selected{% endif %}>Em andamento</option>
-
-                            <option {% if r.status=="Resolvida" %}selected{% endif %}>Resolvida</option>
-
-                        </select>
-
-                        <button type="submit">
-                            Salvar
-                        </button>
-
-                    </form>
-
-                </td>
-
-                <td>
-
-                    <a class="excluir"
-                       href="/excluir/{{ r.id }}">
-                        Excluir
-                    </a>
-
-                </td>
-
-            </tr>
-
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
 </body>
 </html>
