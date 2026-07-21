@@ -1,4 +1,3 @@
-
 import psycopg2
 import psycopg2.extras
 from psycopg2 import sql
@@ -50,18 +49,42 @@ def conectar():
     )
 
 
-def criar_tabela():
+def criar_tabelas():
+    """
+    Cria as tabelas do banco seguindo o modelo:
+
+    CATEGORIA (id PK, nom_categoria)
+    LOCAL (id PK, nome_local)
+    RECLAMACAO (id PK, titulo, descricao, data_criacao, status,
+                categoria_id FK -> categoria.id,
+                local_id FK -> local.id)
+    """
     conn = conectar()
     cur = conn.cursor()
 
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS reclamacoes(
+        CREATE TABLE IF NOT EXISTS categoria(
             id SERIAL PRIMARY KEY,
-            titulo VARCHAR(100),
-            descricao TEXT,
-            categoria VARCHAR(50),
-            local VARCHAR(100),
-            status VARCHAR(30) DEFAULT 'Aberta'
+            nom_categoria VARCHAR(50) UNIQUE NOT NULL
+        )
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS local(
+            id SERIAL PRIMARY KEY,
+            nome_local VARCHAR(100) UNIQUE NOT NULL
+        )
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS reclamacao(
+            id SERIAL PRIMARY KEY,
+            titulo VARCHAR(100) NOT NULL,
+            descricao TEXT NOT NULL,
+            data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            status VARCHAR(30) NOT NULL DEFAULT 'Aberta',
+            categoria_id INTEGER NOT NULL REFERENCES categoria(id),
+            local_id INTEGER NOT NULL REFERENCES local(id)
         )
     """)
 
@@ -70,19 +93,56 @@ def criar_tabela():
     conn.close()
 
 
+def _obter_ou_criar_categoria(cur, nome):
+    cur.execute(
+        "SELECT id FROM categoria WHERE nom_categoria = %s",
+        (nome,)
+    )
+    linha = cur.fetchone()
+
+    if linha:
+        return linha[0]
+
+    cur.execute(
+        "INSERT INTO categoria (nom_categoria) VALUES (%s) RETURNING id",
+        (nome,)
+    )
+    return cur.fetchone()[0]
+
+
+def _obter_ou_criar_local(cur, nome):
+    cur.execute(
+        "SELECT id FROM local WHERE nome_local = %s",
+        (nome,)
+    )
+    linha = cur.fetchone()
+
+    if linha:
+        return linha[0]
+
+    cur.execute(
+        "INSERT INTO local (nome_local) VALUES (%s) RETURNING id",
+        (nome,)
+    )
+    return cur.fetchone()[0]
+
+
 def inserir(titulo, descricao, categoria, local):
     conn = conectar()
     cur = conn.cursor()
 
+    categoria_id = _obter_ou_criar_categoria(cur, categoria)
+    local_id = _obter_ou_criar_local(cur, local)
+
     cur.execute("""
-        INSERT INTO reclamacoes
-        (titulo, descricao, categoria, local)
+        INSERT INTO reclamacao
+        (titulo, descricao, categoria_id, local_id)
         VALUES (%s, %s, %s, %s)
     """, (
         titulo,
         descricao,
-        categoria,
-        local
+        categoria_id,
+        local_id
     ))
 
     conn.commit()
@@ -98,8 +158,18 @@ def listar():
     )
 
     cur.execute("""
-        SELECT * FROM reclamacoes
-        ORDER BY id DESC
+        SELECT
+            r.id,
+            r.titulo,
+            r.descricao,
+            r.data_criacao,
+            r.status,
+            c.nom_categoria AS categoria,
+            l.nome_local AS local
+        FROM reclamacao r
+        JOIN categoria c ON r.categoria_id = c.id
+        JOIN local l ON r.local_id = l.id
+        ORDER BY r.id DESC
     """)
 
     dados = cur.fetchall()
@@ -115,7 +185,7 @@ def atualizar_status(id, status):
     cur = conn.cursor()
 
     cur.execute("""
-        UPDATE reclamacoes
+        UPDATE reclamacao
         SET status = %s
         WHERE id = %s
     """, (status, id))
@@ -130,7 +200,7 @@ def excluir(id):
     cur = conn.cursor()
 
     cur.execute("""
-        DELETE FROM reclamacoes
+        DELETE FROM reclamacao
         WHERE id = %s
     """, (id,))
 
