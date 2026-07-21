@@ -4,7 +4,7 @@ import model
 app = Flask(__name__)
 
 model.criar_banco()
-model.criar_tabela()
+model.criar_tabelas()
 
 
 @app.route("/")
